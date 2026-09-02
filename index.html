@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Treino: Binário ↔ Decimal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Manrope:wght@400;500;700;800&display=swap');
+
+  :root{
+    --bg: #F6F5F1;
+    --panel: #FFFFFF;
+    --ink: #1C2130;
+    --ink-soft: #5B6070;
+    --blue: #2C5AA0;
+    --blue-deep: #1E3F73;
+    --amber: #D98A2B;
+    --green: #2F9E58;
+    --red: #C6494A;
+    --line: #E3E0D8;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Manrope',sans-serif;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:40px 20px;
+  }
+
+  .wrap{ width:100%; max-width:560px; }
+
+  header{ margin-bottom:28px; }
+  header h1{
+    font-size:28px;
+    font-weight:800;
+    margin:0 0 6px 0;
+    letter-spacing:-0.02em;
+  }
+  header p{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:15px;
+    line-height:1.5;
+  }
+
+  .modebar{
+    display:flex;
+    gap:8px;
+    margin:20px 0 24px 0;
+    flex-wrap:wrap;
+  }
+  .modebtn{
+    border:1.5px solid var(--line);
+    background:var(--panel);
+    color:var(--ink-soft);
+    padding:8px 14px;
+    border-radius:8px;
+    font-family:'Manrope',sans-serif;
+    font-size:13.5px;
+    font-weight:700;
+    cursor:pointer;
+    transition:border-color .15s, color .15s, background .15s;
+  }
+  .modebtn:hover{ border-color:var(--blue); color:var(--blue); }
+  .modebtn.active{
+    background:var(--blue);
+    border-color:var(--blue);
+    color:#fff;
+  }
+
+  .score{
+    display:flex;
+    gap:18px;
+    margin-bottom:18px;
+    font-size:14px;
+    color:var(--ink-soft);
+  }
+  .score b{ color:var(--ink); font-weight:800; }
+
+  .card{
+    background:var(--panel);
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    padding:28px 26px;
+  }
+
+  .prompt-label{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+
+  .problem{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:30px;
+    color:var(--blue-deep);
+    letter-spacing:0.02em;
+    margin-bottom:22px;
+    word-break:break-all;
+    line-height:1.3;
+  }
+  .problem .op{
+    color:var(--amber);
+    margin:0 8px;
+  }
+
+  .answer-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  input#answer{
+    flex:1;
+    font-family:'JetBrains Mono',monospace;
+    font-size:20px;
+    font-weight:600;
+    padding:12px 14px;
+    border:2px solid var(--line);
+    border-radius:9px;
+    outline:none;
+    color:var(--ink);
+    background:#FCFBF9;
+    transition:border-color .15s;
+  }
+  input#answer:focus{ border-color:var(--blue); }
+  input#answer.correct{ border-color:var(--green); background:#F0FAF3; }
+  input#answer.wrong{ border-color:var(--red); background:#FCF2F2; }
+
+  button#check{
+    font-family:'Manrope',sans-serif;
+    font-weight:800;
+    font-size:15px;
+    padding:0 22px;
+    border:none;
+    border-radius:9px;
+    background:var(--blue);
+    color:#fff;
+    cursor:pointer;
+    transition:background .15s;
+  }
+  button#check:hover{ background:var(--blue-deep); }
+  button#check:disabled{ background:#B9C4D6; cursor:default; }
+
+  .feedback{
+    min-height:26px;
+    font-size:14.5px;
+    font-weight:700;
+    margin-bottom:14px;
+  }
+  .feedback.correct{ color:var(--green); }
+  .feedback.wrong{ color:var(--red); }
+
+  .explain{
+    font-size:13.5px;
+    color:var(--ink-soft);
+    line-height:1.6;
+    background:#FAF9F6;
+    border:1px solid var(--line);
+    border-radius:9px;
+    padding:12px 14px;
+    margin-bottom:18px;
+    font-family:'JetBrains Mono',monospace;
+    display:none;
+    white-space:pre-wrap;
+  }
+  .explain.show{ display:block; }
+
+  .nextrow{ display:flex; justify-content:flex-end; }
+  button#next{
+    font-family:'Manrope',sans-serif;
+    font-weight:800;
+    font-size:14px;
+    padding:9px 18px;
+    border:1.5px solid var(--blue);
+    border-radius:9px;
+    background:#fff;
+    color:var(--blue);
+    cursor:pointer;
+    display:none;
+  }
+  button#next.show{ display:inline-block; }
+  button#next:hover{ background:var(--blue); color:#fff; }
+
+  .streak{
+    margin-top:18px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>Treino: Binário ↔ Decimal</h1>
+    <p>Escolhe o tipo de exercício e resolve. O feedback mostra a conta passo a passo.</p>
+  </header>
+
+  <div class="modebar">
+    <button class="modebtn active" data-mode="b2d">Binário → Decimal</button>
+    <button class="modebtn" data-mode="d2b">Decimal → Binário</button>
+    <button class="modebtn" data-mode="add">Soma Binária</button>
+    <button class="modebtn" data-mode="mix">Misturado</button>
+  </div>
+
+  <div class="score">
+    <div>Acertos: <b id="hits">0</b></div>
+    <div>Erros: <b id="misses">0</b></div>
+    <div>Sequência: <b id="streak">0</b></div>
+  </div>
+
+  <div class="card">
+    <div class="prompt-label" id="prompt-label">Converte para decimal:</div>
+    <div class="problem" id="problem">—</div>
+
+    <div class="answer-row">
+      <input type="text" id="answer" placeholder="tua resposta" autocomplete="off">
+      <button id="check">Conferir</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="explain" id="explain"></div>
+
+    <div class="nextrow">
+      <button id="next">Próximo →</button>
+    </div>
+  </div>
+
+  <div class="streak" id="footer-note">Enter também confere a resposta.</div>
+</div>
+
+<script>
+let mode = 'b2d';
+let current = null;
+let hits = 0, misses = 0, streak = 0;
+
+const problemEl = document.getElementById('problem');
+const labelEl = document.getElementById('prompt-label');
+const answerEl = document.getElementById('answer');
+const feedbackEl = document.getElementById('feedback');
+const explainEl = document.getElementById('explain');
+const checkBtn = document.getElementById('check');
+const nextBtn = document.getElementById('next');
+
+document.querySelectorAll('.modebtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.modebtn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    mode = btn.dataset.mode;
+    newProblem();
+  });
+});
+
+function randInt(min, max){
+  return Math.floor(Math.random()*(max-min+1))+min;
+}
+
+function toBinary(n){
+  return n.toString(2);
+}
+
+function genBinAddExplain(a, b){
+  const sum = a + b;
+  const abin = toBinary(a);
+  const bbin = toBinary(b);
+  const sumbin = toBinary(sum);
+  return `  ${abin.padStart(sumbin.length,' ')}  (=${a})
++ ${bbin.padStart(sumbin.length,' ')}  (=${b})
+${'-'.repeat(sumbin.length+2)}
+  ${sumbin}  (=${sum})`;
+}
+
+function newProblem(){
+  answerEl.value = '';
+  answerEl.className = '';
+  feedbackEl.textContent = '';
+  feedbackEl.className = 'feedback';
+  explainEl.className = 'explain';
+  explainEl.textContent = '';
+  nextBtn.classList.remove('show');
+  checkBtn.disabled = false;
+  answerEl.disabled = false;
+
+  let actualMode = mode;
+  if(mode === 'mix'){
+    const opts = ['b2d','d2b','add'];
+    actualMode = opts[randInt(0,2)];
+  }
+
+  if(actualMode === 'b2d'){
+    const dec = randInt(5, 250);
+    const bin = toBinary(dec);
+    labelEl.textContent = 'Converte para decimal:';
+    problemEl.textContent = bin;
+    current = { type:'b2d', answer: dec, explain: () => {
+      const bits = bin.split('');
+      let parts = [];
+      for(let i=0;i<bits.length;i++){
+        const power = bits.length-1-i;
+        if(bits[i]==='1') parts.push(`2^${power}(${2**power})`);
+      }
+      return `${bin} = ${parts.join(' + ')} = ${dec}`;
+    }};
+  } else if(actualMode === 'd2b'){
+    const dec = randInt(5, 250);
+    labelEl.textContent = 'Converte para binário:';
+    problemEl.textContent = dec;
+    current = { type:'d2b', answer: toBinary(dec), explain: () => {
+      let n = dec, steps = [];
+      while(n>0){
+        steps.push(`${n} ÷ 2 = ${Math.floor(n/2)} resto ${n%2}`);
+        n = Math.floor(n/2);
+      }
+      return steps.join('\n') + `\n→ lendo os restos de baixo pra cima: ${toBinary(dec)}`;
+    }};
+  } else {
+    const a = randInt(3, 60);
+    const b = randInt(3, 60);
+    labelEl.textContent = 'Soma em binário (resposta em binário):';
+    problemEl.innerHTML = `${toBinary(a)}<span class="op">+</span>${toBinary(b)}`;
+    current = { type:'add', answer: toBinary(a+b), explain: () => genBinAddExplain(a,b) };
+  }
+
+  answerEl.focus();
+}
+
+function checkAnswer(){
+  if(!current || checkBtn.disabled) return;
+  const raw = answerEl.value.trim();
+  if(raw === '') return;
+
+  let userVal = raw;
+  let correctVal = current.answer;
+  let isCorrect;
+
+  if(current.type === 'b2d'){
+    isCorrect = parseInt(raw, 10) === correctVal;
+  } else {
+    // remove leading zeros for comparison, must be valid binary
+    const cleaned = raw.replace(/^0+(?=\d)/,'');
+    isCorrect = /^[01]+$/.test(raw) && parseInt(cleaned,2) === parseInt(correctVal,2);
+  }
+
+  checkBtn.disabled = true;
+  answerEl.disabled = true;
+  explainEl.textContent = current.explain();
+  explainEl.classList.add('show');
+
+  if(isCorrect){
+    hits++; streak++;
+    answerEl.classList.add('correct');
+    feedbackEl.textContent = 'Certo! ✓';
+    feedbackEl.classList.add('correct');
+  } else {
+    misses++; streak = 0;
+    answerEl.classList.add('wrong');
+    feedbackEl.textContent = `Errado. Resposta certa: ${correctVal}`;
+    feedbackEl.classList.add('wrong');
+  }
+
+  document.getElementById('hits').textContent = hits;
+  document.getElementById('misses').textContent = misses;
+  document.getElementById('streak').textContent = streak;
+
+  nextBtn.classList.add('show');
+  nextBtn.focus();
+}
+
+checkBtn.addEventListener('click', checkAnswer);
+nextBtn.addEventListener('click', newProblem);
+answerEl.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){
+    if(checkBtn.disabled){ newProblem(); } else { checkAnswer(); }
+  }
+});
+
+newProblem();
+</script>
+
+</body>
+</html>
