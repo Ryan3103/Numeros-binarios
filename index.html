@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Treino: Binário ↔ Decimal</title>
+<title>Sistemas de Numeração — Treino</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -40,9 +40,9 @@
 
   .wrap{ width:100%; max-width:600px; }
 
-  header{ margin-bottom:32px; }
+  header{ margin-bottom:28px; }
   header h1{
-    font-size:26px;
+    font-size:25px;
     font-weight:800;
     margin:0 0 8px 0;
     letter-spacing:-0.01em;
@@ -51,41 +51,38 @@
   header p{
     margin:0;
     color:var(--ink-soft);
-    font-size:14.5px;
-    line-height:1.55;
-    max-width:46ch;
+    font-size:14px;
+    line-height:1.6;
+    max-width:50ch;
   }
 
-  .modebar{
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
+  .control-panel{
     background:var(--panel);
     border:1px solid var(--line);
     border-radius:10px;
-    padding:5px;
-    margin-bottom:20px;
+    padding:16px 18px;
+    margin-bottom:18px;
   }
-  .modebtn{
-    flex:1 1 auto;
-    border:none;
-    background:transparent;
-    color:var(--ink-soft);
-    padding:9px 12px;
-    border-radius:7px;
-    font-family:'Inter',sans-serif;
-    font-size:13px;
+  .control-label{
+    font-size:11.5px;
     font-weight:600;
+    color:var(--ink-faint);
+    margin-bottom:8px;
+  }
+  select#mode-select{
+    width:100%;
+    font-family:'Inter',sans-serif;
+    font-size:14.5px;
+    font-weight:600;
+    color:var(--ink);
+    padding:10px 12px;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    background:#FAFBFC;
     cursor:pointer;
-    transition:background .15s, color .15s;
-    white-space:nowrap;
+    outline:none;
   }
-  .modebtn:hover{ background:#F3F5F8; color:var(--ink); }
-  .modebtn.active{
-    background:var(--navy);
-    color:#fff;
-  }
-  .modebtn.active:hover{ background:var(--navy); }
+  select#mode-select:focus{ border-color:var(--navy); }
 
   .statbar{
     display:flex;
@@ -95,28 +92,13 @@
     margin-bottom:18px;
     overflow:hidden;
   }
-  .stat{
-    flex:1;
-    padding:13px 8px;
-    text-align:center;
-    border-right:1px solid var(--line);
-  }
+  .stat{ flex:1; padding:13px 6px; text-align:center; border-right:1px solid var(--line); }
   .stat:last-child{ border-right:none; }
   .stat .stat-value{
-    display:block;
-    font-family:'JetBrains Mono',monospace;
-    font-size:19px;
-    font-weight:700;
-    color:var(--ink);
-    line-height:1.2;
+    display:block; font-family:'JetBrains Mono',monospace;
+    font-size:18px; font-weight:700; color:var(--ink); line-height:1.2;
   }
-  .stat .stat-label{
-    display:block;
-    font-size:11px;
-    color:var(--ink-faint);
-    margin-top:3px;
-    font-weight:500;
-  }
+  .stat .stat-label{ display:block; font-size:10.5px; color:var(--ink-faint); margin-top:3px; font-weight:500; }
 
   .card{
     background:var(--panel);
@@ -126,41 +108,27 @@
     box-shadow:var(--shadow);
   }
 
-  .prompt-label{
-    font-size:13px;
-    color:var(--ink-soft);
-    margin-bottom:12px;
-    font-weight:500;
-  }
+  .prompt-label{ font-size:13px; color:var(--ink-soft); margin-bottom:12px; font-weight:500; }
 
   .problem{
     font-family:'JetBrains Mono',monospace;
     font-weight:700;
-    font-size:29px;
+    font-size:27px;
     color:var(--navy-deep);
     letter-spacing:0.01em;
     margin-bottom:24px;
     word-break:break-all;
-    line-height:1.3;
+    line-height:1.4;
     padding-bottom:20px;
     border-bottom:1px solid var(--line);
   }
-  .problem .op{
-    color:var(--steel);
-    margin:0 10px;
-    font-weight:700;
-  }
+  .problem .op{ color:var(--steel); margin:0 10px; font-weight:700; }
 
-  .answer-row{
-    display:flex;
-    gap:10px;
-    margin-bottom:18px;
-  }
+  .answer-row{ display:flex; gap:10px; margin-bottom:18px; }
   input#answer{
     flex:1;
     font-family:'JetBrains Mono',monospace;
-    font-size:18px;
-    font-weight:500;
+    font-size:18px; font-weight:500;
     padding:12px 14px;
     border:1.5px solid var(--line);
     border-radius:8px;
@@ -174,204 +142,95 @@
   input#answer.wrong{ border-color:var(--red); background:var(--red-bg); }
 
   button#check{
-    font-family:'Inter',sans-serif;
-    font-weight:700;
-    font-size:14.5px;
-    padding:0 24px;
-    border:none;
-    border-radius:8px;
-    background:var(--navy);
-    color:#fff;
-    cursor:pointer;
+    font-family:'Inter',sans-serif; font-weight:700; font-size:14.5px;
+    padding:0 24px; border:none; border-radius:8px;
+    background:var(--navy); color:#fff; cursor:pointer;
     transition:background .15s;
   }
   button#check:hover{ background:var(--navy-deep); }
   button#check:disabled{ background:#C3CAD4; cursor:default; }
 
-  .feedback{
-    min-height:22px;
-    font-size:14px;
-    font-weight:700;
-    margin-bottom:12px;
-  }
+  .feedback{ min-height:22px; font-size:14px; font-weight:700; margin-bottom:12px; }
   .feedback.correct{ color:var(--green); }
   .feedback.wrong{ color:var(--red); }
 
   .diagnosis{
-    font-size:13.5px;
-    color:#8A3230;
-    background:var(--red-bg);
-    border:1px solid #EFD3D1;
-    border-radius:8px;
-    padding:12px 14px;
-    margin-bottom:12px;
-    display:none;
-    line-height:1.55;
+    font-size:13.5px; color:#8A3230;
+    background:var(--red-bg); border:1px solid #EFD3D1;
+    border-radius:8px; padding:12px 14px; margin-bottom:12px;
+    display:none; line-height:1.55;
   }
   .diagnosis.show{ display:block; }
 
   .bin-compare{ margin-top:10px; }
-  .bin-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-top:5px;
-  }
-  .bin-label{
-    font-family:'Inter',sans-serif;
-    font-size:11px;
-    color:var(--ink-soft);
-    width:80px;
-    flex-shrink:0;
-    font-weight:500;
-  }
+  .bin-row{ display:flex; align-items:center; gap:10px; margin-top:5px; }
+  .bin-label{ font-family:'Inter',sans-serif; font-size:11px; color:var(--ink-soft); width:80px; flex-shrink:0; font-weight:500; }
   .bits{ font-family:'JetBrains Mono',monospace; font-size:16px; letter-spacing:1.5px; }
   .bit{ display:inline-block; padding:1px 4px; border-radius:3px; }
   .bit.ok{ color:var(--green); }
   .bit.bad{ color:#fff; background:var(--red); }
 
   .explain{
-    font-size:13px;
-    color:var(--ink-soft);
-    line-height:1.65;
-    background:#F7F8FA;
-    border:1px solid var(--line);
-    border-radius:8px;
-    padding:14px 16px;
-    margin-bottom:20px;
+    font-size:12.5px; color:var(--ink-soft); line-height:1.65;
+    background:#F7F8FA; border:1px solid var(--line); border-radius:8px;
+    padding:14px 16px; margin-bottom:20px;
     font-family:'JetBrains Mono',monospace;
-    display:none;
-    white-space:pre-wrap;
+    display:none; white-space:pre-wrap;
   }
   .explain.show{ display:block; }
 
   .nextrow{ display:flex; justify-content:flex-end; }
   button#next{
-    font-family:'Inter',sans-serif;
-    font-weight:700;
-    font-size:13.5px;
-    padding:9px 18px;
-    border:1.5px solid var(--navy);
-    border-radius:8px;
-    background:#fff;
-    color:var(--navy);
-    cursor:pointer;
-    display:none;
+    font-family:'Inter',sans-serif; font-weight:700; font-size:13.5px;
+    padding:9px 18px; border:1.5px solid var(--navy); border-radius:8px;
+    background:#fff; color:var(--navy); cursor:pointer; display:none;
     transition:background .15s, color .15s;
   }
   button#next.show{ display:inline-block; }
   button#next:hover{ background:var(--navy); color:#fff; }
 
-  .footer-row{
-    margin-top:18px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-  }
-  .footer-note{
-    font-size:12px;
-    color:var(--ink-faint);
-  }
+  .footer-row{ margin-top:18px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .footer-note{ font-size:12px; color:var(--ink-faint); }
   button#toggle-history{
-    font-family:'Inter',sans-serif;
-    font-weight:600;
-    font-size:12.5px;
-    color:var(--steel);
-    background:none;
-    border:none;
-    cursor:pointer;
-    padding:0;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:12.5px;
+    color:var(--steel); background:none; border:none; cursor:pointer; padding:0;
   }
   button#toggle-history:hover{ color:var(--navy-deep); text-decoration:underline; }
 
   .history-panel{
-    display:none;
-    margin-top:16px;
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:22px 24px;
-    box-shadow:var(--shadow);
+    display:none; margin-top:16px;
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:22px 24px; box-shadow:var(--shadow);
   }
   .history-panel.show{ display:block; }
-
   .history-section{ margin-bottom:22px; }
   .history-section:last-child{ margin-bottom:0; }
-  .history-section h3{
-    font-size:13px;
-    font-weight:700;
-    color:var(--navy-deep);
-    margin:0 0 10px 0;
-  }
-
-  .alltime-row{
-    display:flex;
-    gap:22px;
-  }
+  .history-section h3{ font-size:13px; font-weight:700; color:var(--navy-deep); margin:0 0 10px 0; }
+  .alltime-row{ display:flex; gap:22px; flex-wrap:wrap; }
   .alltime-row div{ font-size:13px; color:var(--ink-soft); }
   .alltime-row b{ color:var(--ink); font-family:'JetBrains Mono',monospace; }
-
-  .session-list, .wrong-list{
-    max-height:220px;
-    overflow-y:auto;
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-  }
-  .session-item{
-    display:flex;
-    justify-content:space-between;
-    font-size:12.5px;
-    color:var(--ink-soft);
-    padding:7px 10px;
-    background:#F7F8FA;
-    border-radius:6px;
-  }
+  .session-list, .wrong-list{ max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; }
+  .session-item{ display:flex; justify-content:space-between; font-size:12.5px; color:var(--ink-soft); padding:7px 10px; background:#F7F8FA; border-radius:6px; gap:8px; }
   .session-item b{ color:var(--ink); }
-
-  .wrong-item{
-    padding:10px 12px;
-    background:#F7F8FA;
-    border-radius:6px;
-    font-size:12.5px;
-  }
-  .wrong-item .wrong-meta{
-    color:var(--ink-faint);
-    font-size:11px;
-    margin-bottom:4px;
-  }
-  .wrong-item .wrong-problem{
-    font-family:'JetBrains Mono',monospace;
-    color:var(--ink);
-    font-weight:600;
-    margin-bottom:3px;
-  }
+  .wrong-item{ padding:10px 12px; background:#F7F8FA; border-radius:6px; font-size:12.5px; }
+  .wrong-item .wrong-meta{ color:var(--ink-faint); font-size:11px; margin-bottom:4px; }
+  .wrong-item .wrong-problem{ font-family:'JetBrains Mono',monospace; color:var(--ink); font-weight:600; margin-bottom:3px; }
   .wrong-item .wrong-detail{ color:var(--ink-soft); }
   .wrong-item .wrong-detail .bad-val{ color:var(--red); font-family:'JetBrains Mono',monospace; font-weight:600; }
   .wrong-item .wrong-detail .good-val{ color:var(--green); font-family:'JetBrains Mono',monospace; font-weight:600; }
-
   .empty-note{ font-size:12.5px; color:var(--ink-faint); font-style:italic; }
-
   button#clear-history{
-    font-family:'Inter',sans-serif;
-    font-weight:600;
-    font-size:12px;
-    color:var(--red);
-    background:none;
-    border:1px solid #EFD3D1;
-    border-radius:7px;
-    padding:6px 12px;
-    cursor:pointer;
-    margin-top:16px;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:12px; color:var(--red);
+    background:none; border:1px solid #EFD3D1; border-radius:7px; padding:6px 12px;
+    cursor:pointer; margin-top:16px;
   }
   button#clear-history:hover{ background:var(--red-bg); }
 
   @media (max-width: 480px){
     .card, .history-panel{ padding:22px 18px; }
-    .problem{ font-size:24px; }
-    .stat .stat-value{ font-size:16px; }
-    .stat .stat-label{ font-size:9.5px; }
+    .problem{ font-size:21px; }
+    .stat .stat-value{ font-size:15px; }
+    .stat .stat-label{ font-size:9px; }
   }
 </style>
 </head>
@@ -379,21 +238,35 @@
 
 <div class="wrap">
   <header>
-    <h1>Treino: Binário ↔ Decimal</h1>
-    <p>Escolha o tipo de exercício e resolva. Cada resposta traz a conta passo a passo e, em caso de erro, aponta exatamente onde a divergência ocorreu. Seu progresso fica salvo entre sessões.</p>
+    <h1>Sistemas de Numeração — Treino</h1>
+    <p>Conversões entre bases (binário, decimal, octal, hexadecimal), operações aritméticas em binário e representação de números negativos em complemento de dois. Cada questão traz a resolução passo a passo e, em caso de erro, aponta a divergência exata. Progresso salvo entre sessões.</p>
   </header>
 
-  <div class="modebar">
-    <button class="modebtn active" data-mode="b2d">Binário → Decimal</button>
-    <button class="modebtn" data-mode="d2b">Decimal → Binário</button>
-    <button class="modebtn" data-mode="add">Soma</button>
-    <button class="modebtn" data-mode="sub">Subtração</button>
-    <button class="modebtn" data-mode="mix">Misturado</button>
+  <div class="control-panel">
+    <div class="control-label">Categoria do exercício</div>
+    <select id="mode-select">
+      <optgroup label="Conversão de bases">
+        <option value="b2d">Binário → Decimal</option>
+        <option value="d2b">Decimal → Binário</option>
+        <option value="hex">Binário ⇄ Hexadecimal</option>
+        <option value="oct">Binário ⇄ Octal</option>
+      </optgroup>
+      <optgroup label="Operações aritméticas em binário">
+        <option value="add">Soma</option>
+        <option value="sub">Subtração</option>
+        <option value="mul">Multiplicação</option>
+        <option value="div">Divisão (exata)</option>
+      </optgroup>
+      <optgroup label="Representação de números">
+        <option value="comp2">Complemento de dois (8 bits)</option>
+      </optgroup>
+      <option value="mix">Misturado — todos os tipos</option>
+    </select>
   </div>
 
   <div class="statbar">
-    <div class="stat"><span class="stat-value" id="hits">0</span><span class="stat-label">Acertos (sessão)</span></div>
-    <div class="stat"><span class="stat-value" id="misses">0</span><span class="stat-label">Erros (sessão)</span></div>
+    <div class="stat"><span class="stat-value" id="hits">0</span><span class="stat-label">Acertos</span></div>
+    <div class="stat"><span class="stat-value" id="misses">0</span><span class="stat-label">Erros</span></div>
     <div class="stat"><span class="stat-value" id="streak">0</span><span class="stat-label">Sequência</span></div>
     <div class="stat"><span class="stat-value" id="accuracy">—</span><span class="stat-label">Aproveitamento</span></div>
   </div>
@@ -424,27 +297,20 @@
   <div class="history-panel" id="history-panel">
     <div class="history-section">
       <h3>Desde sempre</h3>
-      <div class="alltime-row" id="alltime-row">
+      <div class="alltime-row">
         <div>Acertos: <b id="at-hits">0</b></div>
         <div>Erros: <b id="at-misses">0</b></div>
         <div>Aproveitamento: <b id="at-accuracy">—</b></div>
       </div>
     </div>
-
     <div class="history-section">
       <h3>Sessões anteriores</h3>
-      <div class="session-list" id="session-list">
-        <div class="empty-note">Nenhuma sessão registrada ainda.</div>
-      </div>
+      <div class="session-list" id="session-list"><div class="empty-note">Nenhuma sessão registrada ainda.</div></div>
     </div>
-
     <div class="history-section">
       <h3>Questões erradas para revisar</h3>
-      <div class="wrong-list" id="wrong-list">
-        <div class="empty-note">Nenhum erro registrado ainda.</div>
-      </div>
+      <div class="wrong-list" id="wrong-list"><div class="empty-note">Nenhum erro registrado ainda.</div></div>
     </div>
-
     <button id="clear-history">Limpar histórico salvo</button>
   </div>
 </div>
@@ -470,20 +336,99 @@ const historyPanel = document.getElementById('history-panel');
 const toggleHistoryBtn = document.getElementById('toggle-history');
 const sessionListEl = document.getElementById('session-list');
 const wrongListEl = document.getElementById('wrong-list');
+const modeSelect = document.getElementById('mode-select');
 
-document.querySelectorAll('.modebtn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.modebtn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    mode = btn.dataset.mode;
-    newProblem();
-  });
-});
+modeSelect.addEventListener('change', () => { mode = modeSelect.value; newProblem(); });
 
-function randInt(min, max){
-  return Math.floor(Math.random()*(max-min+1))+min;
-}
+function randInt(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
 function toBinary(n){ return n.toString(2); }
+
+function validRegexForBase(base){
+  if(base===2) return /^[01]+$/;
+  if(base===8) return /^[0-7]+$/;
+  if(base===16) return /^[0-9A-Fa-f]+$/;
+}
+
+function genericIsCorrectForBase(raw, correctStr, base){
+  const re = validRegexForBase(base);
+  if(!re.test(raw)) return false;
+  return parseInt(raw, base) === parseInt(correctStr, base);
+}
+
+function diffDigitPositions(userStr, correctStr){
+  const width = Math.max(userStr.length, correctStr.length);
+  const u = userStr.padStart(width,'0');
+  const c = correctStr.padStart(width,'0');
+  let diffs = [];
+  for(let i=0;i<width;i++){
+    if(u[i] !== c[i]) diffs.push({ power: width-1-i, userChar: u[i], correctChar: c[i] });
+  }
+  return diffs;
+}
+
+function renderDigitDiffHTML(userStr, correctStr){
+  const width = Math.max(userStr.length, correctStr.length);
+  const u = userStr.padStart(width,'0');
+  const c = correctStr.padStart(width,'0');
+  let rowUser = '', rowCorrect = '';
+  for(let i=0;i<width;i++){
+    const cls = u[i]===c[i] ? 'ok' : 'bad';
+    rowUser += `<span class="bit ${cls}">${u[i]}</span>`;
+    rowCorrect += `<span class="bit ${cls}">${c[i]}</span>`;
+  }
+  return `<div class="bin-compare">
+    <div class="bin-row"><span class="bin-label">sua resposta</span><span class="bits">${rowUser}</span></div>
+    <div class="bin-row"><span class="bin-label">correta</span><span class="bits">${rowCorrect}</span></div>
+  </div>`;
+}
+
+function diagnoseBaseAnswer(raw, correctStr, base){
+  const re = validRegexForBase(base);
+  const baseName = base===2?'2 (binário)':base===8?'8 (octal)':'16 (hexadecimal)';
+  if(!re.test(raw)) return { text:`Isso não é um valor válido em base ${baseName}.`, visual:'' };
+  const userNorm = base===16 ? raw.toUpperCase() : raw;
+  const correctNorm = base===16 ? correctStr.toUpperCase() : correctStr;
+  const diffs = diffDigitPositions(userNorm, correctNorm);
+  if(diffs.length === 0) return { text:null, visual:'' };
+  let text;
+  if(diffs.length <= 3){
+    const parts = diffs.map(d => `posição ${base}^${d.power} (valor ${base**d.power}): você pôs ${d.userChar}, o certo é ${d.correctChar}`);
+    text = 'Onde errou: ' + parts.join('; ') + '.';
+  } else {
+    text = `Vários dígitos saíram errados (${diffs.length} no total) — confira a conta passo a passo abaixo.`;
+  }
+  return { text, visual: renderDigitDiffHTML(userNorm, correctNorm) };
+}
+
+function diagnoseB2DAnswer(raw, correctDec, bin){
+  const userNum = parseInt(raw, 10);
+  if(isNaN(userNum)) return { text:'Isso não é um número decimal válido.', visual:'' };
+  const diff = userNum - correctDec;
+  const diffs = diffDigitPositions(userNum.toString(2), bin);
+  let msg = `Sua resposta ficou ${Math.abs(diff)} ${diff>0?'a mais':'a menos'} do que o correto (${correctDec}).`;
+  let visual = '';
+  if(diffs.length > 0){
+    if(diffs.length <= 3){
+      const powers = diffs.map(d => `2^${d.power}(${2**d.power})`).join(', ');
+      msg += ` Provavelmente contou errado o(s) bit(s) ${powers}.`;
+    }
+    visual = renderDigitDiffHTML(userNum.toString(2), bin);
+  }
+  return { text: msg, visual };
+}
+
+function diagnoseComp2Dec(raw, correctVal, bits){
+  const userNum = parseInt(raw, 10);
+  if(isNaN(userNum)) return { text:'Isso não é um número decimal válido.', visual:'' };
+  const unsigned = parseInt(bits, 2);
+  if(userNum === unsigned && unsigned !== correctVal){
+    return { text:`Parece que você leu como número sem sinal (${unsigned}) e esqueceu que o bit mais significativo (${bits[0]}) indica valor negativo em complemento de dois.`, visual:'' };
+  }
+  const diff = userNum - correctVal;
+  return { text:`Sua resposta ficou ${Math.abs(diff)} ${diff>0?'a mais':'a menos'} do que o correto (${correctVal}).`, visual:'' };
+}
+
+// ---- Explanation generators ----
 
 function genBinAddExplain(a, b){
   const sum = a + b;
@@ -504,58 +449,287 @@ ${'-'.repeat(width+2)}
   ${diffbin.padStart(width,'0')}  (=${diff})`;
 }
 
-function diffBinaryPositions(userBin, correctBin){
-  const width = Math.max(userBin.length, correctBin.length);
-  const u = userBin.padStart(width,'0');
-  const c = correctBin.padStart(width,'0');
-  let diffs = [];
-  for(let i=0;i<width;i++){
-    if(u[i] !== c[i]) diffs.push({ power: width-1-i, userBit: u[i], correctBit: c[i] });
+function genBinMulExplain(a, b){
+  const bBin = toBinary(b);
+  const bBits = bBin.split('').reverse();
+  const resultBin = toBinary(a*b);
+  const partials = [];
+  for(let i=0;i<bBits.length;i++){
+    if(bBits[i] === '1'){
+      const shifted = a << i;
+      partials.push(`  ${toBinary(shifted).padStart(resultBin.length,' ')}  (bit ${i} de ${bBin} é 1 → ${toBinary(a)} deslocado ${i} posição(ões))`);
+    }
   }
-  return diffs;
+  return `${toBinary(a)} (${a}) × ${toBinary(b)} (${b})
+
+Produtos parciais:
+${partials.join('\n')}
+
+Soma dos parciais = ${resultBin}  (=${a*b})`;
 }
 
-function diagnoseBinaryAnswer(userRaw, correctBin){
-  if(!/^[01]+$/.test(userRaw)) return 'Isso não é um binário válido — só pode ter os dígitos 0 e 1.';
-  const diffs = diffBinaryPositions(userRaw, correctBin);
-  if(diffs.length === 0) return null;
-  if(diffs.length <= 3){
-    const parts = diffs.map(d => `posição 2^${d.power} (valor ${2**d.power}): você pôs ${d.userBit}, o certo é ${d.correctBit}`);
-    return 'Onde errou: ' + parts.join('; ') + '.';
-  }
-  return `Vários dígitos saíram errados (${diffs.length} no total) — confira a conta passo a passo abaixo.`;
+function genBinDivExplain(a, b, q){
+  return `${toBinary(a)} (${a}) ÷ ${toBinary(b)} (${b})
+
+Em decimal: ${a} ÷ ${b} = ${q}
+${q} em binário = ${toBinary(q)}
+
+Conferindo: ${toBinary(b)} × ${toBinary(q)} = ${toBinary(a)}  (${b} × ${q} = ${a})`;
 }
 
-function diagnoseB2DAnswer(userRaw, correctDec, bin){
-  const userNum = parseInt(userRaw, 10);
-  if(isNaN(userNum)) return 'Isso não é um número decimal válido.';
-  const diff = userNum - correctDec;
-  const diffs = diffBinaryPositions(userNum.toString(2), bin);
-  let msg = `Sua resposta ficou ${Math.abs(diff)} ${diff>0?'a mais':'a menos'} do que o correto (${correctDec}).`;
-  if(diffs.length > 0 && diffs.length <= 3){
-    const powers = diffs.map(d => `2^${d.power}(${2**d.power})`).join(', ');
-    msg += ` Provavelmente contou errado o(s) bit(s) ${powers}.`;
-  }
-  return msg;
+function genBinToBaseExplain(bin, base, groupSize){
+  const padLen = Math.ceil(bin.length/groupSize)*groupSize;
+  const padded = bin.padStart(padLen, '0');
+  let groups = [];
+  for(let i=0;i<padded.length;i+=groupSize) groups.push(padded.slice(i,i+groupSize));
+  const digits = groups.map(g => parseInt(g,2).toString(base).toUpperCase());
+  const lines = groups.map((g,i) => `  ${g} → ${digits[i]}`).join('\n');
+  return `${bin} (agrupando de ${groupSize} em ${groupSize} bits: ${padded})
+
+${lines}
+
+Resultado: ${digits.join('')}`;
 }
 
-function renderBinDiffHTML(userBin, correctBin){
-  const width = Math.max(userBin.length, correctBin.length);
-  const u = userBin.padStart(width,'0');
-  const c = correctBin.padStart(width,'0');
-  let rowUser = '', rowCorrect = '';
-  for(let i=0;i<width;i++){
-    const cls = u[i]===c[i] ? 'ok' : 'bad';
-    rowUser += `<span class="bit ${cls}">${u[i]}</span>`;
-    rowCorrect += `<span class="bit ${cls}">${c[i]}</span>`;
-  }
-  return `<div class="bin-compare">
-    <div class="bin-row"><span class="bin-label">sua resposta</span><span class="bits">${rowUser}</span></div>
-    <div class="bin-row"><span class="bin-label">correta</span><span class="bits">${rowCorrect}</span></div>
-  </div>`;
+function genBaseToBinExplain(str, base, groupSize){
+  const digits = str.split('');
+  const groups = digits.map(d => parseInt(d, base).toString(2).padStart(groupSize,'0'));
+  const lines = digits.map((d,i) => `  ${d} → ${groups[i]}`).join('\n');
+  return `${str}
+
+${lines}
+
+Resultado: ${groups.join('')}`;
 }
 
-const MODE_LABELS = { b2d:'Binário → Decimal', d2b:'Decimal → Binário', add:'Soma binária', sub:'Subtração binária' };
+function genDec2CompExplain(decVal, bits){
+  if(decVal >= 0){
+    return `${decVal} é positivo → converte para binário normal e completa com zeros à esquerda até 8 bits.
+
+${decVal} em binário = ${decVal.toString(2)} → completando: ${bits}`;
+  }
+  const absBin = Math.abs(decVal).toString(2).padStart(8,'0');
+  const inv = absBin.split('').map(c => c==='0'?'1':'0').join('');
+  return `${decVal} é negativo → passos do complemento de dois:
+
+1) valor absoluto (${Math.abs(decVal)}) em 8 bits: ${absBin}
+2) inverte todos os bits: ${inv}
+3) soma 1: ${bits}`;
+}
+
+function genComp2DecExplain(bits, val){
+  if(bits[0] === '1'){
+    const inv = bits.split('').map(c => c==='0'?'1':'0').join('');
+    const invPlus1 = parseInt(inv,2) + 1;
+    const magBin = invPlus1.toString(2).padStart(8,'0');
+    return `${bits}
+Bit mais significativo = 1 → número negativo.
+
+Para achar a magnitude: inverte os bits e soma 1.
+inverte: ${inv}
++1:      ${magBin}  (=${invPlus1})
+
+Valor final: -${invPlus1}`;
+  }
+  return `${bits}
+Bit mais significativo = 0 → número positivo, lê direto.
+
+Valor: ${val}`;
+}
+
+// ---- Problem generators ----
+
+function makeB2DProblem(){
+  const dec = randInt(5, 250);
+  const bin = toBinary(dec);
+  return {
+    modeLabel: 'Binário → Decimal',
+    problemLabel: 'Converta para decimal:',
+    problemDisplay: bin,
+    problemText: bin,
+    answer: String(dec),
+    isCorrect: raw => parseInt(raw,10) === dec,
+    explain: () => {
+      const bits = bin.split('');
+      let parts = [];
+      for(let i=0;i<bits.length;i++){
+        const power = bits.length-1-i;
+        if(bits[i]==='1') parts.push(`2^${power}(${2**power})`);
+      }
+      return `${bin} = ${parts.join(' + ')} = ${dec}`;
+    },
+    diagnose: raw => diagnoseB2DAnswer(raw, dec, bin)
+  };
+}
+
+function makeD2BProblem(){
+  const dec = randInt(5, 250);
+  const bin = toBinary(dec);
+  return {
+    modeLabel: 'Decimal → Binário',
+    problemLabel: 'Converta para binário:',
+    problemDisplay: String(dec),
+    problemText: String(dec),
+    answer: bin,
+    isCorrect: raw => genericIsCorrectForBase(raw, bin, 2),
+    explain: () => {
+      let n = dec, steps = [];
+      while(n > 0){ steps.push(`${n} ÷ 2 = ${Math.floor(n/2)} resto ${n%2}`); n = Math.floor(n/2); }
+      return steps.join('\n') + `\n→ lendo os restos de baixo pra cima: ${bin}`;
+    },
+    diagnose: raw => diagnoseBaseAnswer(raw, bin, 2)
+  };
+}
+
+function makeAddProblem(){
+  const a = randInt(3, 60), b = randInt(3, 60);
+  const bin = toBinary(a+b);
+  return {
+    modeLabel: 'Soma binária',
+    problemLabel: 'Some em binário (resposta em binário):',
+    problemDisplay: `${toBinary(a)}<span class="op">+</span>${toBinary(b)}`,
+    problemText: `${toBinary(a)} + ${toBinary(b)}`,
+    answer: bin,
+    isCorrect: raw => genericIsCorrectForBase(raw, bin, 2),
+    explain: () => genBinAddExplain(a,b),
+    diagnose: raw => diagnoseBaseAnswer(raw, bin, 2)
+  };
+}
+
+function makeSubProblem(){
+  let a = randInt(10, 90), b = randInt(3, 90);
+  if(b > a){ const t=a; a=b; b=t; }
+  const bin = toBinary(a-b);
+  return {
+    modeLabel: 'Subtração binária',
+    problemLabel: 'Subtraia em binário (resposta em binário):',
+    problemDisplay: `${toBinary(a)}<span class="op">−</span>${toBinary(b)}`,
+    problemText: `${toBinary(a)} − ${toBinary(b)}`,
+    answer: bin,
+    isCorrect: raw => genericIsCorrectForBase(raw, bin, 2),
+    explain: () => genBinSubExplain(a,b),
+    diagnose: raw => diagnoseBaseAnswer(raw, bin, 2)
+  };
+}
+
+function makeMulProblem(){
+  const a = randInt(2, 15), b = randInt(2, 15);
+  const bin = toBinary(a*b);
+  return {
+    modeLabel: 'Multiplicação binária',
+    problemLabel: 'Multiplique em binário (resposta em binário):',
+    problemDisplay: `${toBinary(a)}<span class="op">×</span>${toBinary(b)}`,
+    problemText: `${toBinary(a)} × ${toBinary(b)}`,
+    answer: bin,
+    isCorrect: raw => genericIsCorrectForBase(raw, bin, 2),
+    explain: () => genBinMulExplain(a,b),
+    diagnose: raw => diagnoseBaseAnswer(raw, bin, 2)
+  };
+}
+
+function makeDivProblem(){
+  const b = randInt(2, 9), q = randInt(2, 15), a = b*q;
+  const bin = toBinary(q);
+  return {
+    modeLabel: 'Divisão binária',
+    problemLabel: 'Divida em binário — divisão exata (resposta = quociente em binário):',
+    problemDisplay: `${toBinary(a)}<span class="op">÷</span>${toBinary(b)}`,
+    problemText: `${toBinary(a)} ÷ ${toBinary(b)}`,
+    answer: bin,
+    isCorrect: raw => genericIsCorrectForBase(raw, bin, 2),
+    explain: () => genBinDivExplain(a,b,q),
+    diagnose: raw => diagnoseBaseAnswer(raw, bin, 2)
+  };
+}
+
+function makeHexProblem(){
+  const dec = randInt(5, 250);
+  const bin = toBinary(dec);
+  const hex = dec.toString(16).toUpperCase();
+  if(Math.random() < 0.5){
+    return {
+      modeLabel: 'Binário → Hexadecimal',
+      problemLabel: 'Converta o binário para hexadecimal:',
+      problemDisplay: bin, problemText: bin,
+      answer: hex,
+      isCorrect: raw => genericIsCorrectForBase(raw, hex, 16),
+      explain: () => genBinToBaseExplain(bin, 16, 4),
+      diagnose: raw => diagnoseBaseAnswer(raw, hex, 16)
+    };
+  }
+  return {
+    modeLabel: 'Hexadecimal → Binário',
+    problemLabel: 'Converta o hexadecimal para binário:',
+    problemDisplay: hex, problemText: hex,
+    answer: bin,
+    isCorrect: raw => genericIsCorrectForBase(raw, bin, 2),
+    explain: () => genBaseToBinExplain(hex, 16, 4),
+    diagnose: raw => diagnoseBaseAnswer(raw, bin, 2)
+  };
+}
+
+function makeOctProblem(){
+  const dec = randInt(5, 250);
+  const bin = toBinary(dec);
+  const oct = dec.toString(8);
+  if(Math.random() < 0.5){
+    return {
+      modeLabel: 'Binário → Octal',
+      problemLabel: 'Converta o binário para octal:',
+      problemDisplay: bin, problemText: bin,
+      answer: oct,
+      isCorrect: raw => genericIsCorrectForBase(raw, oct, 8),
+      explain: () => genBinToBaseExplain(bin, 8, 3),
+      diagnose: raw => diagnoseBaseAnswer(raw, oct, 8)
+    };
+  }
+  return {
+    modeLabel: 'Octal → Binário',
+    problemLabel: 'Converta o octal para binário:',
+    problemDisplay: oct, problemText: oct,
+    answer: bin,
+    isCorrect: raw => genericIsCorrectForBase(raw, bin, 2),
+    explain: () => genBaseToBinExplain(oct, 8, 3),
+    diagnose: raw => diagnoseBaseAnswer(raw, bin, 2)
+  };
+}
+
+function makeComp2Problem(){
+  if(Math.random() < 0.5){
+    const decVal = randInt(-128, 127);
+    const bits = ((decVal + 256) % 256).toString(2).padStart(8,'0');
+    return {
+      modeLabel: 'Complemento de dois (decimal → binário)',
+      problemLabel: 'Converta para complemento de dois de 8 bits:',
+      problemDisplay: String(decVal), problemText: String(decVal),
+      answer: bits,
+      isCorrect: raw => genericIsCorrectForBase(raw, bits, 2),
+      explain: () => genDec2CompExplain(decVal, bits),
+      diagnose: raw => diagnoseBaseAnswer(raw, bits, 2)
+    };
+  }
+  const bits = randInt(0, 255).toString(2).padStart(8,'0');
+  const rawVal = parseInt(bits,2);
+  const val = rawVal >= 128 ? rawVal - 256 : rawVal;
+  return {
+    modeLabel: 'Complemento de dois (binário → decimal)',
+    problemLabel: 'Este número está em complemento de dois de 8 bits. Qual o valor decimal?',
+    problemDisplay: bits, problemText: bits,
+    answer: String(val),
+    isCorrect: raw => parseInt(raw,10) === val,
+    explain: () => genComp2DecExplain(bits, val),
+    diagnose: raw => diagnoseComp2Dec(raw, val, bits)
+  };
+}
+
+const generatorMap = {
+  b2d: makeB2DProblem, d2b: makeD2BProblem,
+  hex: makeHexProblem, oct: makeOctProblem,
+  add: makeAddProblem, sub: makeSubProblem,
+  mul: makeMulProblem, div: makeDivProblem,
+  comp2: makeComp2Problem
+};
+const generatorKeys = Object.keys(generatorMap);
 
 let lastKey = null;
 
@@ -572,69 +746,18 @@ function newProblem(){
   checkBtn.disabled = false;
   answerEl.disabled = false;
 
-  let attempts = 0;
-  let key;
-
+  let attempts = 0, key, candidate;
   do{
     attempts++;
-    let actualMode = mode;
-    if(mode === 'mix'){
-      const opts = ['b2d','d2b','add','sub'];
-      actualMode = opts[randInt(0,3)];
-    }
-
-    if(actualMode === 'b2d'){
-      const dec = randInt(5, 250);
-      const bin = toBinary(dec);
-      key = 'b2d:'+dec;
-      if(key === lastKey && attempts < 6) continue;
-      labelEl.textContent = 'Converta para decimal:';
-      problemEl.textContent = bin;
-      current = { type:'b2d', modeKey:'b2d', problemText: bin, answer: dec, bin: bin, explain: () => {
-        const bits = bin.split('');
-        let parts = [];
-        for(let i=0;i<bits.length;i++){
-          const power = bits.length-1-i;
-          if(bits[i]==='1') parts.push(`2^${power}(${2**power})`);
-        }
-        return `${bin} = ${parts.join(' + ')} = ${dec}`;
-      }};
-    } else if(actualMode === 'd2b'){
-      const dec = randInt(5, 250);
-      key = 'd2b:'+dec;
-      if(key === lastKey && attempts < 6) continue;
-      labelEl.textContent = 'Converta para binário:';
-      problemEl.textContent = dec;
-      current = { type:'d2b', modeKey:'d2b', problemText: String(dec), answer: toBinary(dec), explain: () => {
-        let n = dec, steps = [];
-        while(n>0){
-          steps.push(`${n} ÷ 2 = ${Math.floor(n/2)} resto ${n%2}`);
-          n = Math.floor(n/2);
-        }
-        return steps.join('\n') + `\n→ lendo os restos de baixo pra cima: ${toBinary(dec)}`;
-      }};
-    } else if(actualMode === 'add'){
-      const a = randInt(3, 60);
-      const b = randInt(3, 60);
-      key = 'add:'+a+'-'+b;
-      if(key === lastKey && attempts < 6) continue;
-      labelEl.textContent = 'Some em binário (resposta em binário):';
-      problemEl.innerHTML = `${toBinary(a)}<span class="op">+</span>${toBinary(b)}`;
-      current = { type:'add', modeKey:'add', problemText: `${toBinary(a)} + ${toBinary(b)}`, answer: toBinary(a+b), explain: () => genBinAddExplain(a,b) };
-    } else if(actualMode === 'sub'){
-      let a = randInt(10, 90);
-      let b = randInt(3, 90);
-      if(b > a){ const t = a; a = b; b = t; }
-      key = 'sub:'+a+'-'+b;
-      if(key === lastKey && attempts < 6) continue;
-      labelEl.textContent = 'Subtraia em binário (resposta em binário):';
-      problemEl.innerHTML = `${toBinary(a)}<span class="op">−</span>${toBinary(b)}`;
-      current = { type:'sub', modeKey:'sub', problemText: `${toBinary(a)} − ${toBinary(b)}`, answer: toBinary(a-b), explain: () => genBinSubExplain(a,b) };
-    }
-    break;
-  } while(true);
+    const actualMode = mode === 'mix' ? generatorKeys[randInt(0, generatorKeys.length-1)] : mode;
+    candidate = generatorMap[actualMode]();
+    key = actualMode + ':' + candidate.problemText;
+  } while(key === lastKey && attempts < 6);
 
   lastKey = key;
+  current = candidate;
+  labelEl.textContent = current.problemLabel;
+  problemEl.innerHTML = current.problemDisplay;
   answerEl.focus();
 }
 
@@ -643,15 +766,7 @@ async function checkAnswer(){
   const raw = answerEl.value.trim();
   if(raw === '') return;
 
-  let correctVal = current.answer;
-  let isCorrect;
-
-  if(current.type === 'b2d'){
-    isCorrect = parseInt(raw, 10) === correctVal;
-  } else {
-    const cleaned = raw.replace(/^0+(?=\d)/,'');
-    isCorrect = /^[01]+$/.test(raw) && parseInt(cleaned,2) === parseInt(correctVal,2);
-  }
+  const isCorrect = current.isCorrect(raw);
 
   checkBtn.disabled = true;
   answerEl.disabled = true;
@@ -669,30 +784,21 @@ async function checkAnswer(){
   } else {
     misses++; streak = 0; allTimeMisses++;
     answerEl.classList.add('wrong');
-    feedbackEl.textContent = `Incorreto. Resposta certa: ${correctVal}`;
+    feedbackEl.textContent = `Incorreto. Resposta certa: ${current.answer}`;
     feedbackEl.classList.add('wrong');
 
-    let diagText = null;
-    let diagVisual = '';
-    if(current.type === 'b2d'){
-      diagText = diagnoseB2DAnswer(raw, correctVal, current.bin);
-      const userNum = parseInt(raw, 10);
-      if(!isNaN(userNum)) diagVisual = renderBinDiffHTML(userNum.toString(2), current.bin);
-    } else {
-      diagText = diagnoseBinaryAnswer(raw, correctVal);
-      if(/^[01]+$/.test(raw)) diagVisual = renderBinDiffHTML(raw, correctVal);
-    }
+    const { text: diagText, visual: diagVisual } = current.diagnose(raw);
     if(diagText){
-      diagnosisEl.innerHTML = `<div>${diagText}</div>${diagVisual}`;
+      diagnosisEl.innerHTML = `<div>${diagText}</div>${diagVisual || ''}`;
       diagnosisEl.classList.add('show');
     }
 
     wrongLog.unshift({
       ts: new Date().toLocaleString('pt-BR'),
-      modeLabel: MODE_LABELS[current.modeKey],
+      modeLabel: current.modeLabel,
       problem: current.problemText,
       userAnswer: raw,
-      correctAnswer: String(correctVal)
+      correctAnswer: current.answer
     });
     wrongLog = wrongLog.slice(0, 50);
   }
@@ -712,18 +818,9 @@ async function checkAnswer(){
 }
 
 function upsertSessionRecord(){
-  const existingIdx = sessionLog.findIndex(s => s.id === sessionId);
-  const record = {
-    id: sessionId,
-    date: new Date(sessionId).toLocaleString('pt-BR'),
-    hits: hits,
-    misses: misses
-  };
-  if(existingIdx >= 0){
-    sessionLog[existingIdx] = record;
-  } else {
-    sessionLog.unshift(record);
-  }
+  const idx = sessionLog.findIndex(s => s.id === sessionId);
+  const record = { id: sessionId, date: new Date(sessionId).toLocaleString('pt-BR'), hits, misses };
+  if(idx >= 0) sessionLog[idx] = record; else sessionLog.unshift(record);
   sessionLog = sessionLog.slice(0, 20);
 }
 
@@ -733,27 +830,22 @@ function renderHistoryPanel(){
   document.getElementById('at-misses').textContent = allTimeMisses;
   document.getElementById('at-accuracy').textContent = atTotal > 0 ? Math.round((allTimeHits/atTotal)*100)+'%' : '—';
 
-  if(sessionLog.length === 0){
-    sessionListEl.innerHTML = '<div class="empty-note">Nenhuma sessão registrada ainda.</div>';
-  } else {
-    sessionListEl.innerHTML = sessionLog.map(s => {
-      const t = s.hits + s.misses;
-      const pct = t > 0 ? Math.round((s.hits/t)*100)+'%' : '—';
-      return `<div class="session-item"><span>${s.date}</span><span><b>${s.hits}</b> acertos / <b>${s.misses}</b> erros (${pct})</span></div>`;
-    }).join('');
-  }
+  sessionListEl.innerHTML = sessionLog.length === 0
+    ? '<div class="empty-note">Nenhuma sessão registrada ainda.</div>'
+    : sessionLog.map(s => {
+        const t = s.hits + s.misses;
+        const pct = t > 0 ? Math.round((s.hits/t)*100)+'%' : '—';
+        return `<div class="session-item"><span>${s.date}</span><span><b>${s.hits}</b> acertos / <b>${s.misses}</b> erros (${pct})</span></div>`;
+      }).join('');
 
-  if(wrongLog.length === 0){
-    wrongListEl.innerHTML = '<div class="empty-note">Nenhum erro registrado ainda.</div>';
-  } else {
-    wrongListEl.innerHTML = wrongLog.map(w => `
+  wrongListEl.innerHTML = wrongLog.length === 0
+    ? '<div class="empty-note">Nenhum erro registrado ainda.</div>'
+    : wrongLog.map(w => `
       <div class="wrong-item">
         <div class="wrong-meta">${w.ts} · ${w.modeLabel}</div>
         <div class="wrong-problem">${w.problem}</div>
         <div class="wrong-detail">você respondeu <span class="bad-val">${w.userAnswer}</span> — correto: <span class="good-val">${w.correctAnswer}</span></div>
-      </div>
-    `).join('');
-  }
+      </div>`).join('');
 }
 
 async function persistAll(){
@@ -761,63 +853,43 @@ async function persistAll(){
     await window.storage.set('totals', JSON.stringify({ hits: allTimeHits, misses: allTimeMisses }), false);
     await window.storage.set('session-log', JSON.stringify(sessionLog), false);
     await window.storage.set('wrong-log', JSON.stringify(wrongLog), false);
-  } catch(err){
-    console.error('Falha ao salvar histórico:', err);
-  }
+  } catch(err){ console.error('Falha ao salvar histórico:', err); }
 }
 
 async function loadPersisted(){
   try{
-    const totalsRes = await window.storage.get('totals', false);
-    if(totalsRes && totalsRes.value){
-      const t = JSON.parse(totalsRes.value);
-      allTimeHits = t.hits || 0;
-      allTimeMisses = t.misses || 0;
-    }
-  } catch(e){ /* no data yet */ }
-
+    const r = await window.storage.get('totals', false);
+    if(r && r.value){ const t = JSON.parse(r.value); allTimeHits = t.hits||0; allTimeMisses = t.misses||0; }
+  } catch(e){}
   try{
-    const sessRes = await window.storage.get('session-log', false);
-    if(sessRes && sessRes.value) sessionLog = JSON.parse(sessRes.value);
-  } catch(e){ /* no data yet */ }
-
+    const r = await window.storage.get('session-log', false);
+    if(r && r.value) sessionLog = JSON.parse(r.value);
+  } catch(e){}
   try{
-    const wrongRes = await window.storage.get('wrong-log', false);
-    if(wrongRes && wrongRes.value) wrongLog = JSON.parse(wrongRes.value);
-  } catch(e){ /* no data yet */ }
-
+    const r = await window.storage.get('wrong-log', false);
+    if(r && r.value) wrongLog = JSON.parse(r.value);
+  } catch(e){}
   renderHistoryPanel();
 }
 
-toggleHistoryBtn.addEventListener('click', ()=>{
+toggleHistoryBtn.addEventListener('click', () => {
   const isOpen = historyPanel.classList.toggle('show');
   toggleHistoryBtn.textContent = isOpen ? 'Ocultar histórico ▴' : 'Ver histórico ▾';
 });
 
-document.getElementById('clear-history').addEventListener('click', async ()=>{
+document.getElementById('clear-history').addEventListener('click', async () => {
   if(!confirm('Isso vai apagar o histórico salvo (total acumulado, sessões e erros). Continuar?')) return;
-  try{
-    const totalsRes = await window.storage.get('totals', false).catch(()=>null);
-    if(totalsRes) await window.storage.delete('totals', false);
-  } catch(e){}
-  try{
-    const sessRes = await window.storage.get('session-log', false).catch(()=>null);
-    if(sessRes) await window.storage.delete('session-log', false);
-  } catch(e){}
-  try{
-    const wrongRes = await window.storage.get('wrong-log', false).catch(()=>null);
-    if(wrongRes) await window.storage.delete('wrong-log', false);
-  } catch(e){}
+  for(const k of ['totals','session-log','wrong-log']){
+    try{ const r = await window.storage.get(k, false).catch(()=>null); if(r) await window.storage.delete(k, false); } catch(e){}
+  }
   allTimeHits = 0; allTimeMisses = 0; sessionLog = []; wrongLog = [];
   renderHistoryPanel();
 });
 
 checkBtn.addEventListener('click', checkAnswer);
 nextBtn.addEventListener('click', newProblem);
-answerEl.addEventListener('keydown', (e)=>{
-  if(e.key === 'Enter'){
-    if(checkBtn.disabled){ newProblem(); } else { checkAnswer(); }
-  }
+answerEl.addEventListener('keydown', (e) => {
+  if(e.key === 'Enter'){ if(checkBtn.disabled){ newProblem(); } else { checkAnswer(); } }
 });
 
 (async function init(){
